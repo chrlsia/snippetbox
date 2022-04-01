@@ -27,6 +27,22 @@ func showSnippet(w http.ResponseWriter, r *http.Request) {
 
 // Add a createSnippet handler function.
 func createSnippet(w http.ResponseWriter, r *http.Request) {
+	// Use r.Method to check whether the request is using POST or not. Note that
+	// http.MethodPost is a constant equal to the string "POST".
+	if r.Method != http.MethodPost {
+		// If it's not, use the w.WriteHeader() method to send a 405 status
+		// code and the w.Write() method to write a "Method Not Allowed"
+		// response body. We then return from the function so that the
+		// subsequent code is not executed.
+
+		//auto einai gia to terminal
+		//ua apeikonisuei to : 405 Method Not Allowed
+		w.WriteHeader(405)
+
+		//ayto einai gia ton browser
+		w.Write([]byte("Method Not Allowed"))
+		return
+	}
 	w.Write([]byte("Create a new snippet..."))
 }
 
@@ -41,3 +57,6 @@ func main() {
 	err := http.ListenAndServe(":4000", mux)
 	log.Fatal(err)
 }
+
+//curl -i -X POST http://localhost:4000/snippet/create
+//curl -i -X PUT http://localhost:4000/snippet/create
